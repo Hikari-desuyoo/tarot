@@ -1,5 +1,7 @@
 <h1 align="center">🔮 Tarot 🔮</h1>
 
+[![Gem Version](https://badge.fury.io/rb/metabase_tarot.svg)](https://badge.fury.io/rb/metabase_tarot)
+
 > Para saber o que está acontecendo no seu banco de dados, consultar o **Tarot** pode ser uma boa!
 
 ### Elevator pitch
