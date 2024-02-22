@@ -2,7 +2,7 @@
 require 'tarot'
 require 'fileutils'
 
-SUBCOMMAND_NAMES = %w[run columns new console]
+SUBCOMMAND_NAMES = %w[run cols new console]
 
 if ARGV.length == 0
   puts "Tarot will give you the answer! But first you have to give tarot the question (#{SUBCOMMAND_NAMES.join(', ')})"
