@@ -1,0 +1,197 @@
+#!/usr/bin/env ruby
+require 'tarot'
+require 'fileutils'
+
+SUBCOMMAND_NAMES = %w[run columns new console]
+
+if ARGV.length == 0
+  puts "Tarot will give you the answer! But first you have to give tarot the question (#{SUBCOMMAND_NAMES.join(', ')})"
+  exit(1)
+end
+
+# https://stackoverflow.com/questions/16323571/measure-the-distance-between-two-strings-with-ruby
+def levenshtein_distance(s, t)
+  m = s.length
+  n = t.length
+  return m if n == 0
+  return n if m == 0
+  d = Array.new(m+1) {Array.new(n+1)}
+
+  (0..m).each {|i| d[i][0] = i}
+  (0..n).each {|j| d[0][j] = j}
+  (1..n).each do |j|
+    (1..m).each do |i|
+      d[i][j] = if s[i-1] == t[j-1] # adjust index into string
+                  d[i-1][j-1]       # no operation required
+                else
+                  [ d[i-1][j]+1,    # deletion
+                    d[i][j-1]+1,    # insertion
+                    d[i-1][j-1]+1,  # substitution
+                  ].min
+                end
+    end
+  end
+  d[m][n]
+end
+
+def pretty_print_databases
+  puts <<~TEXT
+    Available databases:
+    #{Tarot.database_names.join("\n")}
+  TEXT
+end
+
+def pretty_print_array(array)
+  array.each_slice(3) do |slice|
+    puts slice.map { |item| item.ljust(40) }.join
+  end
+end
+
+def demand_argument(index, name)
+  return ARGV[index] if ARGV.count > index
+
+  puts "Missing argument #{index}: #{name}"
+  exit(1)
+end
+
+def require_tarot_spec
+  path = "#{Dir.pwd}/tarot_spec.rb"
+  if !File.exist?("#{Dir.pwd}/tarot_spec.rb")
+    puts "No tarot_spec.rb found on #{Dir.pwd}. To create it on this directory, type: tarot new ."
+    exit(1)
+  end
+  require_relative path
+end
+
+def retrieve_database(database_name)
+  begin
+    database = Tarot.database(database_name)
+  rescue Tarot::DatabaseNotFound
+    pretty_print_databases
+    puts "\nNot found: #{database_name}"
+    did_you_mean(database_name, Tarot.database_names)
+    exit(1)
+  end
+end
+
+def sort_possibilities(input, possibilities)
+  possibilities.sort_by { |possibility| levenshtein_distance(input, possibility) }
+end
+
+def did_you_mean(input, possibilities)
+  return if possibilities.empty?
+
+  sorted_possibilities = sort_possibilities(input, possibilities)
+  closest_match = sorted_possibilities.first
+  distance = levenshtein_distance(input, closest_match)
+
+  return if distance > (input.length / 2)
+
+  puts "Did you mean?  #{closest_match}"
+end
+
+case ARGV[0]
+when 'run'
+  path = demand_argument(1, 'consultation')
+  require_tarot_spec()
+  require_relative "#{Dir.pwd}/consultations/#{path}"
+when 'new'
+  path = "#{Dir.pwd}/#{demand_argument(1, 'path')}"
+
+  if File.exist?("#{path}/tarot_spec.rb")
+    puts 'This already is a valid Tarot folder (tarot_spec.rb exists)'
+    exit(1)
+  end
+
+  FileUtils.mkdir_p(path)
+  File.open("#{path}/tarot_spec.rb", "w") do |file|
+    file.write(
+      <<~RUBY
+        require 'tarot'
+        include Tarot
+
+        Config.build do |config|
+          config.session_expire_days = 13
+          config.url = 'You have to configure the url!'
+          config.database_aliases = {
+            #   my_database: 'The name they actually use on metabase'
+          }
+        end
+      RUBY
+    )
+  end
+
+  File.open("#{path}/.gitignore", "w") do |file|
+    file.write(
+      <<~TEXT
+        .secret_token
+        consultations/
+      TEXT
+    )
+  end
+
+  File.open("#{path}/Gemfile", "w") do |file|
+  file.write(
+    <<~TEXT
+      source 'https://rubygems.org'
+
+      ruby '3.0.0'
+      gem 'metabase_tarot'
+    TEXT
+  )
+end
+
+  puts "New deck created! Remember to configure #{path}/tarot_spec.rb"
+when 'consultation'
+  input = demand_argument(1, 'consultation name')
+  filepath = "consultations/#{input}.rb"
+  FileUtils.mkdir_p(File.dirname(filepath))
+
+  File.open(filepath, "w") do |file|
+    file.write(
+      <<~RUBY
+        consultation(__FILE__) do
+          {
+            query: db('mydatabase').query!(
+              <<~SQL
+                SELECT *
+                FROM yourtablehere
+              SQL
+            )
+          }
+        end
+      RUBY
+    )
+  end
+when 'dbs'
+  require_tarot_spec
+  pretty_print_databases
+when 'cols'
+  require_tarot_spec
+  database_name = demand_argument(1, 'database name')
+  table_name = demand_argument(2, 'table name')
+  database = retrieve_database(database_name)
+  begin
+    query = database.query!("SELECT * FROM #{table_name} LIMIT 1")
+  rescue Tarot::QueryError => e
+    puts "Query for retrieving columns went wrong, probably the table '#{table_name}' does not exist:"
+    puts e
+    exit(1)
+  end
+  pretty_print_array(query.first.keys)
+when 'tables'
+  require_tarot_spec
+  database_name = demand_argument(1, 'database name')
+  database = retrieve_database(database_name)
+  tables = database.query!("SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'")
+                   .map { |x| x.values.first }
+                   .reject { |x| x.start_with?("pg_") || x.start_with?("sql_") }
+  pretty_print_array(tables)
+when 'console'
+  require_tarot_spec
+  Tarot.print_cheatsheet
+  binding.irb
+else
+  puts "Invalid command #{ARGV[0]}"
+  did_you_mean(ARGV[0], SUBCOMMAND_NAMES)
+end
