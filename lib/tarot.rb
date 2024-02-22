@@ -25,7 +25,7 @@ module Tarot
 
     # Usa um bloco, normalmente definido na tarot_spec.rb, para popular as configurações de usuário.
     #
-    # @example
+    # @example Exemplo
     # Config.build do |config|
     #   config.session_expire_days = 13
     #   config.url = 'https://metabase.mycompany.com'
@@ -115,7 +115,7 @@ module Tarot
 
   # Grava os resultados de um bloco em um arquivo YAML com o mesmo nome passado pelo argumento filepath (porém terminando em .yaml), incluindo metadados de quando foi gerado, e do script que gerou o arquivo.
   #
-  # @example
+  # @example Exemplo
       # exemplos/test.rb
   #   consultation(__FILE__) do
   #     db('minha db').query!('SELECT * FROM plans WHERE id = 3;')

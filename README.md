@@ -23,7 +23,7 @@ Para criar um ambiente Tarot e começar a usar, execute:
 
 Para usar o seu novo ambiente Tarot, é necessário estar dentro do diretório dele. Além disso, configure os dados pré-preenchidos em `tarot_spec.rb`:
 - `url`: A URL da aplicação Metabase que você quer se conectar
-- `session_expire_days`: O tanto de dias que leva para sua sessão expirar. Caso não saiba, deixe o valor pré-preenchido (Não se preocupe, usar um valor aqui não terá grandes consequências).
+- `session_expire_days`: O tanto de dias que leva para sua sessão expirar. Caso não saiba, deixe o valor pré-preenchido (Não se preocupe, usar um valor errado aqui não terá grandes consequências).
 - `database_aliases`: É uma hash de aliases para usar no lugar do nome dos bancos de dados registrados no Metabase. Útil para customizar os nomes quando eles são confusos ou não estão padronizados. Os aliases registrados vão substituir seus respectivos nomes originais. É obrigatório que as chaves dessa hash sejam símbolos.
 
 Tendo um ambiente configurado, veja nas seções abaixo o que você deseja fazer.
