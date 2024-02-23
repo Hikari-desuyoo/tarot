@@ -9,7 +9,7 @@
 > [!WARNING]
 > O nome da gem no RubyGems é "**metabase_tarot**", e não "tarot". Cuidado!
 
-### Elevator pitch
+### ⚝ Elevator pitch
 
 O Tarot é uma gem para Ruby 3.0 com a finalidade de se conectar a uma aplicação de Metabase diretamente, usando a API deles. Nessa seção explico alguns motivos para usar o Tarot.
 
@@ -17,7 +17,7 @@ Algumas vezes, usar o front-end do Metabase pode não ser a melhor opção. Com 
 
 Com o tarot, já que a requisição é feita por um script que o usuário escreve, é possível misturar o resultado de várias queries em vários bancos e usar código ruby entre as requisições.
 
-### Quickstart
+### ⚝ Quickstart
 
 Tendo Ruby 3.0 instalado na sua máquina, execute:
 
@@ -35,7 +35,7 @@ Para usar o seu novo ambiente Tarot, é necessário estar dentro do diretório d
 
 Tendo um ambiente configurado, veja nas seções abaixo o que você deseja fazer.
 
-### Como gravar uma `consultation`
+### ⚝ Como gravar uma `consultation`
 
 Uma `consultation` no Tarot significa um arquivo que utiliza os utilitários para se comunicar com o Metabase e gerar um arquivo de resultados. Para criar uma, execute:
 
@@ -51,31 +51,23 @@ Para rodar a consultation, execute:
 
 `$ tarot run [nome da sua consultation]`
 
-### Como abrir o console
+### ⚝ Como abrir o console
 
-Execute:
+Execute: `$ tarot console`
 
-`$ tarot console`
+### ⚝ Como ver os bancos de dados disponíveis
 
-### Como ver os bancos de dados disponíveis
+Execute: `$ tarot dbs`
 
-Execute:
+### ⚝ Como ver as tabelas disponíveis para um banco de dados
 
-`$ tarot dbs`
+Execute: `$ tarot tables [nome ou alias do banco]`
 
-### Como ver as tabelas disponíveis para um banco de dados
+### ⚝ Como ver as colunas disponíveis para uma tabela de um banco de dados
 
-Execute:
+Execute: `$ tarot cols [nome ou alias do banco] [nome da tabela]`
 
-`$ tarot tables [nome ou alias do banco]`
-
-### Como ver as colunas disponíveis para uma tabela de um banco de dados
-
-Execute:
-
-`$ tarot cols [nome ou alias do banco] [nome da tabela]`
-
-### Observações
+### ⚝ Observações
 
 Comecei a desenvolver o projeto em português porque ele se originou de um escopo menor, mas tenho a intenção de reescrever a documentação e README em inglês.
 
