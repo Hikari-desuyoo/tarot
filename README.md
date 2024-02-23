@@ -2,10 +2,10 @@
 
 > Para saber o que está acontecendo no seu banco de dados, consultar o **Tarot** pode ser uma boa!
 
+[![Gem Version](https://badge.fury.io/rb/metabase_tarot.svg)](https://badge.fury.io/rb/metabase_tarot)
+
 > [!WARNING]
 > O nome da gem no ruby gems é "**metabase_tarot**", e não "tarot". Cuidado!
-
-[![Gem Version](https://badge.fury.io/rb/metabase_tarot.svg)](https://badge.fury.io/rb/metabase_tarot)
 
 ### Elevator pitch
 
