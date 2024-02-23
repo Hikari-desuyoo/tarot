@@ -52,7 +52,7 @@ module Tarot
       end
 
       @data.session_expire_days.freeze
-      @data.url.freeze
+      @data.url = URI(@data.url).freeze
       @data.database_aliases.freeze
 
       @built = true
@@ -181,9 +181,9 @@ module Tarot
   # @return [Array<Database>] Array de objetos Database.
   def databases
     unless @databases
-      uri = URI.parse("#{Config.data.url}/api/database")
+      uri = Config.data.url + '/api/database'
       http = Net::HTTP.new(uri.hostname, uri.port)
-      http.use_ssl = true
+      http.use_ssl = uri.scheme == 'https'
 
       request = Net::HTTP::Get.new(uri)
       request['Accept'] = 'application/json'
@@ -214,9 +214,9 @@ module Tarot
   # @param sql [String] Consulta SQL a ser executada.
   # @return [Object] Resultado da API contendo a resposta da consulta ou um JSON com os erros que ocorreram.
   def query(database, sql)
-    uri = URI.parse("#{Config.data.url}/api/dataset/json")
+    uri = Config.data.url + '/api/dataset/json'
     http = Net::HTTP.new(uri.hostname, uri.port)
-    http.use_ssl = true
+    http.use_ssl = uri.scheme == 'https'
 
     request = Net::HTTP::Post.new(uri,
      'Accept' => 'application/json',
@@ -267,9 +267,9 @@ module Tarot
     token = token_json['token']
 
     if token.nil?
-      uri = URI("#{Config.data.url}/api/session")
+      uri = Config.data.url + '/api/session'
       http = Net::HTTP.new(uri.hostname, uri.port)
-      http.use_ssl = true
+      http.use_ssl = uri.scheme == 'https'
 
       request = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
       login = {}
@@ -284,7 +284,7 @@ module Tarot
       begin
         response = http.request(request)
       rescue OpenSSL::SSL::SSLError
-        puts "#{Config.data.url} seems to be unreachable at the moment"
+        puts "#{Config.data.url.to_s} seems to be unreachable at the moment"
       end
 
       token = JSON.parse(response.body)['id']
