@@ -1,6 +1,6 @@
 <h1 align="center">🔮 Tarot 🔮</h1>
 
-<p align="center">Para saber o que está acontecendo no seu banco de dados, consultar o **Tarot** pode ser uma boa!</p>
+<p align="center">Para saber o que está acontecendo no seu banco de dados, consultar o <b>Tarot</b> pode ser uma boa!</p>
 
 ---
 
