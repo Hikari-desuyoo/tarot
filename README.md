@@ -19,7 +19,9 @@ Com o tarot, já que a requisição é feita por um script que o usuário escrev
 
 ### ⚝ Quickstart
 
-![Exemplo](example.gif)
+<div align="center">
+  <img src="example.gif" alt="Example" width="90%">
+</div>
 
 Tendo Ruby 3.0 instalado na sua máquina, execute:
 
