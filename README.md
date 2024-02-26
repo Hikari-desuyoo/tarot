@@ -19,6 +19,8 @@ Com o tarot, já que a requisição é feita por um script que o usuário escrev
 
 ### Quickstart
 
+![Exemplo](example.gif)
+
 Tendo Ruby 3.0 instalado na sua máquina, execute:
 
 `$ gem install metabase_tarot`
