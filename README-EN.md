@@ -4,8 +4,15 @@
 
 ---
 
-[![Gem Version](https://badge.fury.io/rb/metabase_tarot.svg)](https://badge.fury.io/rb/metabase_tarot)
-
+<p align="left">
+  <a href="https://badge.fury.io/rb/metabase_tarot">
+    <img src="https://badge.fury.io/rb/metabase_tarot.svg" alt="Gem Version">
+  </a>
+  <a href="README.md">
+    <img src="https://img.shields.io/badge/Portuguese-blue" alt="Portuguese">
+  </a>
+</p>
+  
 > [!WARNING]
 > The name of the gem in RubyGems is "**metabase_tarot**", not "tarot". Be careful!
 
